@@ -30,9 +30,9 @@ const Home = () => {
                     alignItems="center"
                     spacing={['16', '56']}
                 >
-                    <VStack width={'full'} alignItems={['center', 'flex-end']}>
+                    <VStack width={'full'} alignItems={['center', 'flex-end']} spacing={'8'}>
                         <Heading children="Learn from the best teachers" size={'2xl'} />
-                        <Text children="find best courses at reasonable price" />
+                        <Text textAlign={["center","left"]} children="find best courses at reasonable price" />
                         <Link to="/courses">
                             <Button size={'lg'} colorScheme="purple">
                                 Explore courses
