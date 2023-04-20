@@ -1,6 +1,6 @@
 import { Box, HStack, Heading, Stack, VStack } from '@chakra-ui/react'
 import React from 'react'
-import {TiSocialLinkedinCircular} from "react-icons/ti"
+import {TiSocialLinkedinCircular,TiSocialTwitterCircular} from "react-icons/ti"
 import {DiGithub} from "react-icons/di";
 
 
@@ -19,6 +19,9 @@ const Footer = () => {
                 </a>
                 <a href="https://github.com/sachinkumar5035" target='blank'>
                     <DiGithub/>
+                </a>
+                <a href="https://twitter.com/Sachink81720711" target='blank'>
+                    <TiSocialTwitterCircular/>
                 </a>
             </HStack>
         </Stack>    

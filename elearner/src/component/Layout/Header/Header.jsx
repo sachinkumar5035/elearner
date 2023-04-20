@@ -27,7 +27,7 @@ const Header = () => {
         </Link>
     );
 
-    const isAuthenticated = true;
+    const isAuthenticated = false;
     const user = {
         role: 'admin',
     };
