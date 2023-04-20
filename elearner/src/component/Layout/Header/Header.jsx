@@ -21,8 +21,8 @@ import { Link } from 'react-router-dom';
 const Header = () => {
     const { onClose, isOpen, onOpen } = useDisclosure();
 
-    const LinkButton = ({ url = '/', title = 'Home' }) => (
-        <Link to={url}>
+    const LinkButton = ({ url = '/', title = 'Home',onClose }) => (
+        <Link onClick={onClose} to={url}>
             <Button variant={'ghost'}>{title}</Button>
         </Link>
     );
@@ -34,6 +34,7 @@ const Header = () => {
 
     const logoutClick = ()=> {
         console.log("Logout")
+        onClose();
     }
 
     return (
@@ -60,11 +61,11 @@ const Header = () => {
 
                     <DrawerBody>
                         <VStack spacing={'2px'} alignItems={'flex-start'}>
-                            <LinkButton url="/" title={'Home'} />
-                            <LinkButton url="/courses" title={'Browse Courses'} />
-                            <LinkButton url="/request" title={'Request for a course'} />
-                            <LinkButton url="/contact" title={'Contact Us'} />
-                            <LinkButton url="/about" title={'About us'} />
+                            <LinkButton onClose={onClose} url="/" title={'Home'} />
+                            <LinkButton onClose={onClose} url="/courses" title={'Browse Courses'} />
+                            <LinkButton onClose={onClose} url="/request" title={'Request for a course'} />
+                            <LinkButton onClose={onClose} url="/contact" title={'Contact Us'} />
+                            <LinkButton onClose={onClose} url="/about" title={'About us'} />
 
                             <HStack
                                 justifyContent={'space-evenly'}
@@ -77,7 +78,7 @@ const Header = () => {
                                     <>
                                         <VStack>
                                             <HStack>
-                                                <Link to={'/profile'}>
+                                                <Link onClick={onClose} to={'/profile'}>
                                                     <Button colorScheme="purple" >Profile</Button>
                                                 </Link>
                                                 <Button colorScheme="purple" onClick={logoutClick}>
@@ -86,7 +87,7 @@ const Header = () => {
                                                 </Button>
                                             </HStack>
                                             (user && user.role ==='admin' &&
-                                            <Link to={'/admin/dashboard'}>
+                                            <Link onClick={onClose} to={'/admin/dashboard'}>
                                                 <Button colorScheme="purple" variant={'ghost'}>
                                                     <RiDashboardFill style={{ margin: '2px' }} />
                                                     Dashboard
@@ -98,11 +99,11 @@ const Header = () => {
                                 ) : (
                                     // not login in person
                                     <>
-                                        <Link to={'/login'}>
+                                        <Link onClick={onClose} to={'/login'}>
                                             <Button colorScheme="purple">Login</Button>
                                         </Link>
                                         <h6>Or</h6>
-                                        <Link to={'/register'}>
+                                        <Link onClick={onClose} to={'/register'}>
                                             <Button colorScheme="purple">Sign up</Button>
                                         </Link>
                                     </>
