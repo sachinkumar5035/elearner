@@ -5,6 +5,7 @@ import Header from './component/Layout/Header/Header.jsx';
 import Courses from './component/Courses/Courses.jsx';
 import Footer from './component/Layout/Footer/Footer.jsx';
 import Login from './component/Auth/Login.jsx';
+import Register from './component/Auth/Register.jsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path='/courses' element={<Courses/>}/>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/register' element={<Register/>}/>
       </Routes>
       <Footer/>
     </Router>
