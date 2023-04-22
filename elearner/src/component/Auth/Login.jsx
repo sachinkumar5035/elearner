@@ -40,7 +40,7 @@ const Login = () => {
                         </Input>
                     </Box>
                     <Box my={'4'}>
-                        <Link to={'/forgotpassword'} ><Button fontSize={'xs'} colorScheme='purple' variant={'link'}>Forget password</Button></Link>
+                        <Link to={'/forgetpassword'} ><Button fontSize={'xs'} colorScheme='purple' variant={'link'}>Forget password</Button></Link>
                     </Box>
                     <Button my={'4'} type='submit' colorScheme={'purple'} >Login</Button>
                     <Box my={'4'}>
