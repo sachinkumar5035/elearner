@@ -7,6 +7,7 @@ import Footer from './component/Layout/Footer/Footer.jsx';
 import Login from './component/Auth/Login.jsx';
 import Register from './component/Auth/Register.jsx';
 import ForgetPassword from './component/Auth/ForgetPassword.jsx';
+import ResetPassword from './component/Auth/ResetPassword.jsx';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/forgetpassword' element={<ForgetPassword/>}/>
+        <Route path='/password/reset/:token' element={<ResetPassword/>}/>
       </Routes>
       <Footer/>
     </Router>

@@ -4,14 +4,13 @@ import React, { useState } from 'react'
 const ForgetPassword = () => {
     const [email,setEmail] = useState("");
     return (
-        <Container>
+        <Container padding={'14'} h={'90vh'}>
             <form>
                 <Heading children="Forget Password" textTransform={'uppercase'} my={'16'} textAlign={['center', 'left']} />
                 <VStack spacing={'6'}>
                     
                     <Input 
                         required
-                        id='email'
                         value={email}
                         onChange={(e)=>setEmail(e.target.value)}
                         placeholder='abc@gmail.com'
