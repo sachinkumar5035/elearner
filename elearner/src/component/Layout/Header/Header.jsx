@@ -57,7 +57,7 @@ const Header = () => {
             <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay backdropFilter={'blur(3px)'} />
                 <DrawerContent>
-                    <DrawerHeader borderBottomWidth={'2px'}>Elearner</DrawerHeader>
+                    <DrawerHeader borderBottomWidth={'2px'}>E-Learner</DrawerHeader>
 
                     <DrawerBody>
                         <VStack spacing={'2px'} alignItems={'flex-start'}>

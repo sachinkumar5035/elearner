@@ -9,6 +9,8 @@ import Register from './component/Auth/Register.jsx';
 import ForgetPassword from './component/Auth/ForgetPassword.jsx';
 import ResetPassword from './component/Auth/ResetPassword.jsx';
 import Contact from './component/Contact/Contact.jsx';
+import Request from './component/Request/Request.jsx';
+import About from './component/About/About.jsx';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path='/forgetpassword' element={<ForgetPassword/>}/>
         <Route path='/password/reset/:token' element={<ResetPassword/>}/>
         <Route path='/contact' element={<Contact/>}/>
+        <Route path='/request' element={<Request/>}/>
+        <Route path='/about' element={<About/>}/>
       </Routes>
       <Footer/>
     </Router>
