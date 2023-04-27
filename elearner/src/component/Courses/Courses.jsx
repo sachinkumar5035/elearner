@@ -12,6 +12,8 @@ import {
   Link,
 } from '@chakra-ui/react';
 
+
+
 const Course = ({
   views,
   title,
@@ -62,8 +64,10 @@ const Course = ({
       />
 
       <Stack alignItems={'center'} direction={['column', 'row']}>
-        <Link to={`/course/${id}`}>
-          <Button colorScheme="purple">Watch Now</Button>
+        <Link to={`/course/:${id}`}>
+          <Button size={'lg'} colorScheme="purple">
+            Watch Now
+          </Button>
         </Link>
         <Button
           variant={'ghost'}

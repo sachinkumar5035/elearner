@@ -1,6 +1,6 @@
 import { Box, Button, Container, Heading, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
-import { RiCheckFill, RiCheckboxCircleFill } from 'react-icons/ri'
+import {  RiCheckboxCircleFill } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
 
 const PaymentSuccess = () => {

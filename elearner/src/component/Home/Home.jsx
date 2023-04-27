@@ -15,7 +15,7 @@ import vg from '../../assets/images/bg.png';
 import { CgGoogle, CgYoutube } from "react-icons/cg";
 import { SiCoursera, SiUdemy, SiUdacity } from "react-icons/si";
 import { DiAws } from "react-icons/di";
-import introVideo from '../../assets/videos/intro.mp4';
+import introVideo from '../../assets/videos/challa.mp4';
 
 
 

@@ -12,7 +12,7 @@ import {
 import React from 'react';
 import profile from '../../assets/images/profile.png';
 import { Link } from 'react-router-dom';
-import introVideo from '../../assets/videos/intro.mp4';
+import introVideo from '../../assets/videos/challa.mp4';
 import { RiSecurePaymentFill } from 'react-icons/ri';
 import termsAndCondition from '../../assets/docs/TermsAndConditions.js';
 
