@@ -17,6 +17,7 @@ export const ColorModeSwitcher = props => {
       position={'fixed'}
       top={'6'}
       right={'4'}
+      zIndex={'overlay'}
       onClick={toggleColorMode}
       icon={<SwitchIcon />}
       {...props}

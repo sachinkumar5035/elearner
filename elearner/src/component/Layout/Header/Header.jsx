@@ -27,7 +27,7 @@ const Header = () => {
         </Link>
     );
 
-    const isAuthenticated = false;
+    const isAuthenticated = true;
     const user = {
         role: 'admin',
     };
@@ -49,6 +49,7 @@ const Header = () => {
                 position={'fixed'}
                 top={'6'}
                 left={4}
+                zIndex={'overlay'}
                 bottom={'6'}
             >
                 <RiMenu5Fill />

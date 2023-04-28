@@ -65,7 +65,7 @@ const Course = ({
 
       <Stack alignItems={'center'} direction={['column', 'row']}>
         <Link to={`/course/:${id}`}>
-          <Button size={'lg'} colorScheme="purple">
+          <Button size={'lg'} colorScheme="purple" >
             Watch Now
           </Button>
         </Link>

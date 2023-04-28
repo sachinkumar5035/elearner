@@ -16,6 +16,9 @@ import PaymentSuccess from './component/Payments/PaymentSuccess.jsx';
 import PaymentFail from './component/Payments/PaymentFail.jsx';
 import NotFound from './component/Layout/NotFound/NotFound.jsx';
 import CourseDetail from './component/CoursePage/CourseDetail.jsx';
+import Profile from './component/Profile/Profile.jsx';
+import UpdateProfile from './component/Profile/UpdateProfile.jsx';
+import ChangePassword from './component/Profile/ChangePassword.jsx';
 
 function App() {
   window.addEventListener('contextmenu',e=>{
@@ -29,6 +32,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path='/courses' element={<Courses />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile/update' element={<UpdateProfile />} />
+        <Route path='/password/change' element={<ChangePassword />} />
         <Route path='/register' element={<Register />} />
         <Route path='/forgetpassword' element={<ForgetPassword />} />
         <Route path='/password/reset/:token' element={<ResetPassword />} />
