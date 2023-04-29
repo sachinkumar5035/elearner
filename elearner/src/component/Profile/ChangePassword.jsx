@@ -10,7 +10,7 @@ const ChangePassword = () => {
                 <Heading
                     textTransform={'uppercase'}
                     children="Change password"
-                    textAlign={['center', 'left']}
+                    textAlign={['center']}
                     marginY={'16'}
                 />
                     <VStack

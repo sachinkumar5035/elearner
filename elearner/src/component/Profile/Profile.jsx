@@ -87,7 +87,7 @@ const Profile = () => {
             direction={['column', 'row']}
             alignItems={'center'}
           >
-            <Link to={'/profile/update'}>
+            <Link to={'/profile/change'}>
               <Button colorScheme='purple' variant={'ghost'}>Update Profile</Button>
             </Link>
             <Link to={'/password/update'}>
