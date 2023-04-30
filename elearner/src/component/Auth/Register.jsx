@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 
 export const fileUploadCSS = {
   cursor: 'pointer',
-  marginLeft: '-5%',
+  margin: 'auto',
   widhth: '110%',
   height: '100%',
   border: 'none',
