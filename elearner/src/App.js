@@ -25,9 +25,9 @@ import Users from './component/Admin/Users/Users.jsx';
 import AdminCourses from './component/Admin/Courses/AdminCourses.jsx';
 
 function App() {
-  window.addEventListener('contextmenu',e=>{
-    e.preventDefault();
-  })
+  // window.addEventListener('contextmenu',e=>{
+  //   e.preventDefault();
+  // })
 
   return (
     <Router>

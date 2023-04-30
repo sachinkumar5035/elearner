@@ -2,6 +2,9 @@ import { Box, Grid, HStack, Heading, Progress, Stack, Text } from '@chakra-ui/re
 import React from 'react';
 import Sidebar from './Sidebar';
 import { RiArrowDownLine, RiArrowUpLine } from 'react-icons/ri';
+import { LineChart } from './LineChart';
+// import { Doughnut } from 'react-chartjs-2';
+import { DoughnutChart } from './DoughnutChart';
 
 const Dashboard = () => {
     return (
@@ -50,6 +53,7 @@ const Dashboard = () => {
                         marginLeft={['0', '16']}
                     />
                     {/* Line graph Here */}
+                    <LineChart/>
                 </Box>
                 <Grid templateColumns={['1fr', '2fr 1fr']}>
                     <Box padding={'4'}>
@@ -69,6 +73,7 @@ const Dashboard = () => {
                     <Box padding={['0','16']} boxSizing='border-box'>
                         <Heading textAlign={'center'} size={'md'} marginBottom={'4'} children={"Users"}/>
                         {/* Dounut Graph */}
+                        <DoughnutChart />
                     </Box>
                 </Grid>
             </Box>
