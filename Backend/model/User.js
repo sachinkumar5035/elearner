@@ -40,7 +40,7 @@ const schema = new mongoose.Schema({
   playlist:[
     { 
       course:{
-        type:mongoose.Schema.Type.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'Course'
         // course model ki ref Id milegi
       },
