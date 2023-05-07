@@ -57,7 +57,7 @@ export const login = CatchAsyncError(async(req,res,next)=>{
     if(!isMatch){
         return next(new ErrorHandler("Incorrect email or password",401));
     }
-
+   
     sendToken(res,user,`welcome ${user.name}`,200);
     
 })
@@ -74,12 +74,11 @@ export const logout = CatchAsyncError(async(req,res,next)=>{
 
 // get a user profile when logged in
 export const getMyProfile = CatchAsyncError(async(req,res,next)=>{
-    const user = await User.findById();
+    const user = await User.findById(req.user._id);
 
     res.status(200).json({
         success:true,
         user
     })
-
 
 })
