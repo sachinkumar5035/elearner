@@ -1,5 +1,5 @@
-import express  from "express";
-import {getAlluser, login, logout, registerUser,getMyProfile} from '../controller/userController.js'
+import express from "express";
+import { getAlluser, login, logout, registerUser, getMyProfile, changePassword, updateProfile, updateProfilePicture, forgetPassword, resetPassword } from '../controller/userController.js'
 import { isAuthenticated } from "../middlewares/auth.js";
 
 
@@ -19,13 +19,27 @@ router.route('/logout').get(logout);
 
 
 // user profile
-router.route('/me').get(isAuthenticated,getMyProfile);
+router.route('/me').get(isAuthenticated, getMyProfile);
 
 
 // change password 
+router.route('/changepassword').put(isAuthenticated, changePassword);
+
 // update profile 
-// reset password 
+router.route('/updateprofile').put(isAuthenticated, updateProfile);
+
+// update profile picture 
+router.route('/updateprofilepicture').put(isAuthenticated, updateProfilePicture);
+
+
 // forget password 
+router.route('/forgetpassword').post(forgetPassword);
+
+// reset password 
+router.route('/resetpassword/:token').put(resetPassword);
+
+
+
 // add to playlist 
 // remove from playlist
 
