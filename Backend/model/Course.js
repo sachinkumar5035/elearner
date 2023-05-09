@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
         required: [true, 'description is required'],
         minLength: [10, 'description is atleast 10 char long'],
     },
-    lecture: [
+    lectures: [
         {
             title: {
                 type: String,

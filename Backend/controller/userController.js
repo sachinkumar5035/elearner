@@ -1,4 +1,5 @@
 import { User } from '../model/User.js'
+import {Course} from '../model/Course.js';
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { sendToken } from '../utils/sendToken.js';
@@ -204,7 +205,7 @@ export const resetPassword = CatchAsyncError(async (req, res, next) => {
         resetPasswordToken,
         resetPasswordExpire: { $gt: Date.now() },
     })
-    console.log(user.email);
+    // console.log(user.email);
     if (!user) {
         return next(new ErrorHandler("token is invalid or expired", 400))
     }
@@ -222,4 +223,58 @@ export const resetPassword = CatchAsyncError(async (req, res, next) => {
         message: "password changed successfully",
     })
 
+})
+
+// add to playlist
+export const addToPlaylist = CatchAsyncError(async(req,res,next)=>{
+
+    const user = await User.findById(req.user._id);
+
+    const course = await Course.findById(req.body.id);// will pass from frontend
+
+    if(!course)
+        return next(new ErrorHandler("Invalid course Id"),404);
+
+    const isExists = user.playlist.find((item)=>{
+        if(item.course.toString() === course._id.toString()) return true;
+    }) 
+
+    if(isExists){
+        return next(new ErrorHandler('item already exists',409));
+    }
+
+    user.playlist.push({
+        course:course._id,
+        poster:course.poster.url,
+    })
+
+    await user.save();
+    res.status(200).json({
+        success:true,
+        message:"Added to playlist"
+    })
+})
+
+
+//remove from playlist
+export const removeFromPlaylist = CatchAsyncError(async(req,res,next)=>{
+
+    const user = await User.findById(req.user._id);
+
+    const course = await Course.findById(req.query.id);// will pass from frontend
+
+    if(!course)
+        return next(new ErrorHandler("Invalid course Id"),404);
+
+    const newPlaylist = user.playlist.filter((item)=>{
+        if(item.course.toString() !== course._id.toString()) return true;
+    }) 
+
+    user.playlist = newPlaylist;
+
+    await user.save();
+    res.status(200).json({
+        success:true,
+        message:"removed from playlist"
+    })
 })
