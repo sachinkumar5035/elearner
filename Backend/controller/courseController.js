@@ -1,7 +1,8 @@
 import { Course } from "../model/Course.js";
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
-
+import getDataUri from "../utils/dataUri.js";
+import cloudinary  from 'cloudinary';
 
 
 // to get list of all available courses in database
@@ -21,16 +22,22 @@ export const createCourse = CatchAsyncError(async (req, res, next) => {
     if (!title || !description || !category || !createdBy) {
         return next(new ErrorHandler("please enter required fields", 400));
     }
+    // fetching file 
+    const file = req.file;
+    const fileUri = getDataUri(file);
 
-    // const file = req.file;
+    // console.log(fileUri.content);
+    // uploading file on cloudinary
+    const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+    // console.log("file uploaded");
     await Course.create({
         title,
         description,
         category,
         createdBy,
         poster: {
-            public_id: "will get from cloudinary",
-            url: "get from cloudinary"
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url
         }
     });
     res.status(201).json({
@@ -59,7 +66,7 @@ export const getCourseLectures = CatchAsyncError(async (req, res, next) => {
 
 })
 
-
+// max video size 100mb because we are using free version
 export const addLecture = CatchAsyncError(async(req,res,next)=>{
     const {id} = req.params;
     const {title,description} = req.body;
@@ -67,13 +74,22 @@ export const addLecture = CatchAsyncError(async(req,res,next)=>{
     // const file  = req.file;
     if(!course)
         return next(new ErrorHandler("course not found",404));
-        // upload file here on cloudinary
+    
+    // upload file here on cloudinary
+
+    const file = req.file;
+    const fileUri = getDataUri(file);
+
+    // console.log(fileUri.content);
+    // uploading file on cloudinary
+    const myCloud = await cloudinary.v2.uploader.upload(fileUri.content,{resource_type:"video"});
+
     course.lectures.push({
         title,
         description,
         video:{
-            public_id:'url from cloudinary',
-            url:'url from cloudinary'
+            public_id:myCloud.public_id,
+            url:myCloud.secure_url
         }
     })
     course.numOfVideos = course.lectures.length;
@@ -84,3 +100,33 @@ export const addLecture = CatchAsyncError(async(req,res,next)=>{
     })
 })
 
+// delete course
+export const deleteCourse = CatchAsyncError(async(req,res,next)=>{
+    const {id} = req.params;
+    const course = await Course.findById(id);
+
+    if(!course)
+        return next(new ErrorHandler("course not found",409));
+
+    await cloudinary.v2.uploader.destroy(course.poster.public_id);
+    // console.log(course.poster.public_id)
+    // deleting lecture one by one
+    for (let index = 0; index < course.lectures.length; index++) {
+        const element = course.lectures[index];
+        await cloudinary.v2.uploader.destroy(element.video.public_id,{
+            resource_type:"video"
+        });
+    }
+
+    await course.remove();
+
+    res.status(200).json({
+        success:true,
+        message:"course deleted successfully"
+    })
+
+})
+
+export const deleteLecture = CatchAsyncError(async(req,res,next)=>{
+    
+})
