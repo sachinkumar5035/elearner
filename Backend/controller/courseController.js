@@ -36,10 +36,11 @@ export const createCourse = CatchAsyncError(async (req, res, next) => {
         category,
         createdBy,
         poster: {
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url
+            public_id: (await myCloud).secure_url,
+            url: (await myCloud).secure_url
         }
     });
+    
     res.status(201).json({
         success: true,
         message: "course created successfully"
@@ -88,8 +89,8 @@ export const addLecture = CatchAsyncError(async(req,res,next)=>{
         title,
         description,
         video:{
-            public_id:myCloud.public_id,
-            url:myCloud.secure_url
+            public_id:(await myCloud).public_id,
+            url:(await myCloud).secure_url
         }
     })
     course.numOfVideos = course.lectures.length;
@@ -118,7 +119,7 @@ export const deleteCourse = CatchAsyncError(async(req,res,next)=>{
         });
     }
 
-    await course.remove();
+    await course.deleteOne();
 
     res.status(200).json({
         success:true,
@@ -127,6 +128,35 @@ export const deleteCourse = CatchAsyncError(async(req,res,next)=>{
 
 })
 
+
+//delete lecture of a course
 export const deleteLecture = CatchAsyncError(async(req,res,next)=>{
+
+    const {courseId,lectureId} = req.query;
+
+    const course = await Course.findById(courseId);
+    if(!course)
+        return next(new ErrorHandler("course not found",409));
     
+    // find the lecture that has to be deleted
+    const lecture = course.lectures.find((item)=>{
+        if(item._id.toString()===lectureId) return item;
+    })
+    // remove from cloudinary
+    await cloudinary.v2.uploader.destroy(lecture.video.public_id,{
+        resource_type:"video"
+    });
+
+    // update the lecture array
+    course.lectures = course.lectures.filter((lecture)=>{
+        if(lecture._id.toString() !== lectureId.toString()) return lecture;
+    })
+
+    course.numOfVideos = course.lectures.length; // update size 
+    await course.save(); // save course 
+    
+    res.status(200).json({
+        success:true,
+        message:"lecture deleted successfully"
+    })
 })

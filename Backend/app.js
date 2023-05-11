@@ -21,13 +21,16 @@ app.use(cookieParser());
 // importing routes
 import courseRoute from './routes/courseRoutes.js';
 import userRoute from './routes/userRoutes.js'
+import paymentRoute from "./routes/paymentRoutes.js"
+
 
 // importing middleware
 import ErrorMiddleware from './middlewares/error.js';
 
-
+// prefix for all api 
 app.use('/api/v1',courseRoute);
 app.use('/api/v1',userRoute);
+app.use('/api/v1',paymentRoute);
 
 export default app;
 

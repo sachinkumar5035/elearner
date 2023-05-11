@@ -1,10 +1,14 @@
 import { User } from '../model/User.js'
-import {Course} from '../model/Course.js';
+import { Course } from '../model/Course.js';
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { sendToken } from '../utils/sendToken.js';
 import { sendMail } from '../utils/sendEmail.js'
 import crypto from 'crypto';
+import cloudinary from 'cloudinary'
+import getDataUri from '../utils/dataUri.js';
+
+
 
 // get list of all users from the DB 
 export const getAlluser = CatchAsyncError(async (req, res, next) => {
@@ -20,27 +24,34 @@ export const getAlluser = CatchAsyncError(async (req, res, next) => {
 // register new user 
 export const registerUser = CatchAsyncError(async (req, res, next) => {
 
-    const { name, email, password } = req.body;
-
-    if (!name || !email || !password) {
-        return next(new ErrorHandler("please enter required fields", 400));
-    }
-
-    let user = await User.findOne({ email });
-    if (user) {
-        return next(new ErrorHandler("user already exists", 409));
-    }
-
-    user = await User.create({
-        name,
-        email,
-        password,
-        avatar: {
-            public_id: "sample public id",
-            url: "sample url"
+    try {
+        const { name, email, password } = req.body;
+        const file = req.file;
+        if (!name || !email || !password || !file) {
+            return next(new ErrorHandler("please enter required fields", 400));
         }
-    })
-    sendToken(res, user, "user registered successfully", 201);
+
+        let user = await User.findOne({ email });
+        if (user) {
+            return next(new ErrorHandler("user already exists", 409));
+        }
+
+        const fileUri = getDataUri(file);
+        const myCloud = cloudinary.v2.uploader.upload(fileUri.content);
+
+        user = await User.create({
+            name,
+            email,
+            password,
+            avatar: {
+                public_id: (await myCloud).public_id,
+                url: (await myCloud).secure_url
+            }
+        })
+        sendToken(res, user, "user registered successfully", 201);
+    } catch (error) {
+        console.log(error.message);
+    }
 })
 
 // login a user
@@ -82,6 +93,24 @@ export const getMyProfile = CatchAsyncError(async (req, res, next) => {
     res.status(200).json({
         success: true,
         user
+    })
+
+})
+
+// delete my pfoile
+export const deleteProfile = CatchAsyncError(async(req,res,next)=>{
+
+    const user = await User.findById(req.user._id);
+    // console.log(user.avatar.public_id);
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+
+    await user.deleteOne();
+    
+    res.status(200).cookie("token",null,{
+        expires:new Date(Date.now())
+    }).json({
+        success:true,
+        message:"Profile deleted successfully"
     })
 
 })
@@ -138,11 +167,20 @@ export const updateProfile = CatchAsyncError(async (req, res, next) => {
 //update profile picture
 export const updateProfilePicture = CatchAsyncError(async (req, res, next) => {
 
-    // const {file} = req.body;
+    const file = req.file;
+    const fileUri = getDataUri(file);
+    const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
 
-    // const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
 
-    // await user.save();
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+
+    user.avatar = {
+        public_id: (await myCloud).public_id,
+        url: (await myCloud).secure_url
+    }
+
+    await user.save();
 
     res.status(200).json({
         success: true,
@@ -198,10 +236,10 @@ export const forgetPassword = CatchAsyncError(async (req, res, next) => {
 export const resetPassword = CatchAsyncError(async (req, res, next) => {
 
     const { token } = req.params;
-    
+
     const resetPasswordToken = crypto.createHash('sha256').update(token).digest('hex');
-    
-    const user =await User.findOne({
+
+    const user = await User.findOne({
         resetPasswordToken,
         resetPasswordExpire: { $gt: Date.now() },
     })
@@ -214,7 +252,7 @@ export const resetPassword = CatchAsyncError(async (req, res, next) => {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
-    
+
 
     await user.save({ validateBeforeSave: false });
 
@@ -226,55 +264,112 @@ export const resetPassword = CatchAsyncError(async (req, res, next) => {
 })
 
 // add to playlist
-export const addToPlaylist = CatchAsyncError(async(req,res,next)=>{
+export const addToPlaylist = CatchAsyncError(async (req, res, next) => {
 
     const user = await User.findById(req.user._id);
 
     const course = await Course.findById(req.body.id);// will pass from frontend
 
-    if(!course)
-        return next(new ErrorHandler("Invalid course Id"),404);
+    if (!course)
+        return next(new ErrorHandler("Invalid course Id"), 404);
 
-    const isExists = user.playlist.find((item)=>{
-        if(item.course.toString() === course._id.toString()) return true;
-    }) 
+    const isExists = user.playlist.find((item) => {
+        if (item.course.toString() === course._id.toString()) return true;
+    })
 
-    if(isExists){
-        return next(new ErrorHandler('item already exists',409));
+    if (isExists) {
+        return next(new ErrorHandler('item already exists', 409));
     }
 
     user.playlist.push({
-        course:course._id,
-        poster:course.poster.url,
+        course: course._id,
+        poster: course.poster.url,
     })
 
     await user.save();
     res.status(200).json({
-        success:true,
-        message:"Added to playlist"
+        success: true,
+        message: "Added to playlist"
     })
 })
 
 
 //remove from playlist
-export const removeFromPlaylist = CatchAsyncError(async(req,res,next)=>{
+export const removeFromPlaylist = CatchAsyncError(async (req, res, next) => {
 
     const user = await User.findById(req.user._id);
 
     const course = await Course.findById(req.query.id);// will pass from frontend
 
-    if(!course)
-        return next(new ErrorHandler("Invalid course Id"),404);
+    if (!course)
+        return next(new ErrorHandler("Invalid course Id"), 404);
 
-    const newPlaylist = user.playlist.filter((item)=>{
-        if(item.course.toString() !== course._id.toString()) return true;
-    }) 
+    const newPlaylist = user.playlist.filter((item) => {
+        if (item.course.toString() !== course._id.toString()) return true;
+    })
 
     user.playlist = newPlaylist;
 
     await user.save();
     res.status(200).json({
-        success:true,
-        message:"removed from playlist"
+        success: true,
+        message: "removed from playlist"
     })
+})
+
+
+
+// admin routes
+export const getAllusers = CatchAsyncError(async(req,res,next)=>{
+    const users = await User.find();
+    res.status(200).json({
+        success:true,
+        users
+    })
+})
+
+// update the role of the user 
+export const updateUserRole = CatchAsyncError(async(req,res,next)=>{
+
+    const {role} = req.body;
+    const userId = req.params.id;
+    const user = await User.findById(userId); // if user is logged in then it will be available in user 
+
+    if(!user)
+        return next(new ErrorHandler("no user found",404));
+    
+    user.role = role;
+
+    await user.save();
+
+    res.status(200).json({
+        success:true,
+        user,
+        message:"role update successfully"
+    })
+
+})
+
+//delete user
+export const deleteUser = CatchAsyncError(async(req,res,next)=>{
+
+    const user = await User.findById(req.params.id);
+    // console.log(user);
+    if(!user)
+        return next(new ErrorHandler("user not found",404));
+    
+
+    await user.deleteOne();
+
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id); // delete the image from cloudinary
+
+    // cancel the subscription for this user as well
+
+    await user.save();
+
+    res.status(200).json({
+        success:true,
+        message:"user deleted successfully"
+    })
+
 })
