@@ -19,6 +19,14 @@ export const isAuthenticated = CatchAsyncError(async(req,res,next)=>{
 })
 
 
+export const isSubscriber = (req,res,next)=>{
+    if(req.user.subscription.status !== 'active' && res.user.role !== 'admin'){
+        return next(new ErrorHandler(`only subscribers can access these resource`,403));
+    }
+    next();
+}
+
+
 export const isAdmin = (req,res,next)=>{
     if(req.user.role !== 'admin'){
         return next(new ErrorHandler(`${req.user.role} is not allowed to access these resource`,403));

@@ -1,7 +1,7 @@
 import express  from "express";
 import {addLecture, createCourse, deleteCourse, deleteLecture, getAllcourse, getCourseLectures} from '../controller/courseController.js'
 import singleUpload from "../middlewares/multer.js";
-import { isAdmin, isAuthenticated } from "../middlewares/auth.js";
+import { isAdmin, isAuthenticated, isSubscriber } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.route("/courses").get(getAllcourse);
 router.route('/createcourse').post(isAuthenticated,isAdmin,singleUpload,createCourse);
 
 // add lecture , delete lecture, get course details 
-router.route('/course/:id').get(getCourseLectures).post(isAuthenticated,isAdmin,singleUpload,addLecture).delete(isAuthenticated,isAdmin,deleteCourse);
+router.route('/course/:id').get(isAuthenticated,isSubscriber,getCourseLectures).post(isAuthenticated,isAdmin,singleUpload,addLecture).delete(isAuthenticated,isAdmin,deleteCourse);
 
 // delete lecture
 router.route('/lecture').delete(isAuthenticated,isAdmin,deleteLecture); 
