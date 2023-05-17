@@ -3,7 +3,7 @@ import { Course } from '../model/Course.js';
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { sendToken } from '../utils/sendToken.js';
-import { sendMail } from '../utils/sendEmail.js'
+import { sendEmail } from '../utils/sendEmail.js'
 import crypto from 'crypto';
 import cloudinary from 'cloudinary'
 import getDataUri from '../utils/dataUri.js';
@@ -211,7 +211,7 @@ export const forgetPassword = CatchAsyncError(async (req, res, next) => {
     const mailBody = `please click on link below if you have requested to forgot password ${resetPasswordUrl}. please ignore if not requested.`
     try {
         // this function in utils sendMail
-        await sendMail({
+        await sendEmail({
             email: user.email,
             subject: "eLearner password recovery",
             message: mailBody
