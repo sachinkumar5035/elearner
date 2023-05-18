@@ -1,7 +1,7 @@
 import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { sendEmail } from "../utils/sendEmail.js";
-
+import { Stats } from "../model/Stats.js";
 
 export const contact = CatchAsyncError(async (req, res, next) => {
 
@@ -42,5 +42,27 @@ export const courseRequest = CatchAsyncError(async (req, res, next) => {
 })
 
 export const getDashboardStats = CatchAsyncError(async (req, res, next) => {
+
+    const stats = await Stats.find({}).sort({createdAt:"desc"}).limit(12);
+
+    const statsData = [];
+
+    for (let index = 0; index < stats.length; index++) {
+        const element = stats[index];
+        statsData.unshift(element);
+    }
+    const requiredSize = 12-stats.length;
+    for (let index = 0; index < requiredSize; index++) {
+        statsData.unshift({
+            users:0,
+            subscription:0,
+            views:0
+        });
+    }
+
+    res.status(200).json({
+        success:true,
+        message:"got the data from backend"
+    })
 
 })
