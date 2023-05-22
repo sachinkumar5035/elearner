@@ -60,9 +60,56 @@ export const getDashboardStats = CatchAsyncError(async (req, res, next) => {
         });
     }
 
+    const userCount = statsData[11].users; // last month 
+    const subscriptionCount = statsData[11].subscription; // last month
+    const viewsCount = statsData[11].views; // last month
+
+    let userPercentage = 0;
+    let viewsPercentage=0;
+    let subscriptionPercentage=0;
+    let usersProfit=true;
+    let subscriptionProfit=true;
+    let viewsProfit=true;
+    // getting percentage profit for last moth base for it will be 10th month
+    // 11th month have 25
+    // 10th month have 20
+    // percentage will be ((25-20)/20)*100
+    if(statsData[10].users===0) userPercentage=statsData[11].users*100;
+    if(statsData[10].views===0) viewsPercentage=statsData[11].views*100;
+    if(statsData[10].subscription===0) subscriptionPercentage=statsData[11].subscription*100;
+    else{
+        const difference={
+            users : statsData[11].users-statsData[10].users,
+            views: statsData[11].views-statsData[10].views,
+            subscription: statsData[11].subscription-statsData[10].subscription
+        }
+        userPercentage = (difference.users/statsData[10].users)*100,
+        viewsPercentage=(difference.views/statsData[10].views)*100,
+        subscriptionPercentage=(difference.subscription/statsData[10].subscription)*100
+        if(userPercentage<0){
+            usersProfit=false;
+        }
+        if(viewsPercentage<0){
+            viewsProfit=false;
+        }
+        if(subscriptionPercentage<0){
+            subscriptionProfit=false;
+        }
+    }
+
     res.status(200).json({
         success:true,
-        message:"got the data from backend"
+        stats:statsData, // for entire year 
+        count:statsData.length,
+        userCount:userCount, 
+        subscriptionCount:subscriptionCount,
+        viewsCount:viewsCount,
+        userPercentage:userPercentage,
+        subscriptionPercentage:subscriptionPercentage,
+        viewsPercentage:viewsPercentage,
+        usersProfit:usersProfit,
+        viewsProfit:viewsProfit,
+        subscriptionProfit:subscriptionProfit
     })
 
 })

@@ -7,6 +7,7 @@ import { sendEmail } from '../utils/sendEmail.js'
 import crypto from 'crypto';
 import cloudinary from 'cloudinary'
 import getDataUri from '../utils/dataUri.js';
+import { Stats } from '../model/Stats.js';
 
 
 
@@ -372,4 +373,15 @@ export const deleteUser = CatchAsyncError(async(req,res,next)=>{
         message:"user deleted successfully"
     })
 
+})
+
+
+
+// add wath when any changes happens in User model
+User.watch().on("change",async()=>{
+    const stats = await Stats.find().sort({createdAt:"desc"}).limit(1);
+    const subscribedUser = await User.find({"subscription.status":"active"});
+    const users = await User.countDocuments();
+    const subscription=subscribedUser.length;
+    // const 
 })
