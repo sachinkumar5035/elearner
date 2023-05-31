@@ -3,7 +3,7 @@ import { CatchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import getDataUri from "../utils/dataUri.js";
 import cloudinary  from 'cloudinary';
-
+import { Stats } from "../model/Stats.js";
 
 // to get list of all available courses in database
 export const getAllcourse = CatchAsyncError(async (req, res, next) => {
@@ -159,4 +159,19 @@ export const deleteLecture = CatchAsyncError(async(req,res,next)=>{
         success:true,
         message:"lecture deleted successfully"
     })
+})
+
+
+ // adding watch on course model as well (same as user model)
+Course.watch().on("change",async()=>{
+    const stats = await Stats.find({}).sort({createdAt:"desc"}).limit(1);
+    const courses = await Course.find({});// get all courses
+    let totalViews=0;
+    for (let index = 0; index < courses.length; index++) {
+        const course = course[index];
+        totalViews+=course.views;
+    }
+    stats[0].views = totalViews;
+    stats[0].createdAt = new Date(Date.now());
+    await stats[0].save();
 })

@@ -378,10 +378,12 @@ export const deleteUser = CatchAsyncError(async(req,res,next)=>{
 
 
 // add wath when any changes happens in User model
+// if any changes occurs in User model then this trigger will trigger and make changes in stats and user model 
 User.watch().on("change",async()=>{
-    const stats = await Stats.find().sort({createdAt:"desc"}).limit(1);
+    const stats = await Stats.find({}).sort({createdAt:"desc"}).limit(1);
     const subscribedUser = await User.find({"subscription.status":"active"});
-    const users = await User.countDocuments();
-    const subscription=subscribedUser.length;
-    // const 
+    stats[0].users = await User.countDocuments();
+    stats[0].subscription=subscribedUser.length;
+    stats[0].createdAt=new Date(Date.now());
+    await stats.save();
 })
