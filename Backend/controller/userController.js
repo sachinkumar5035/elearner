@@ -49,6 +49,7 @@ export const registerUser = CatchAsyncError(async (req, res, next) => {
                 url: (await myCloud).secure_url
             }
         })
+        console.log("user created");
         sendToken(res, user, "user registered successfully", 201);
     } catch (error) {
         console.log(error.message);
