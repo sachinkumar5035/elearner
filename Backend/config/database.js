@@ -6,7 +6,3 @@ const connectToMongo=async ()=>{
 }
 
 export default connectToMongo;
-
-
-
-// DB_URI=mongodb+srv://sachin:Sachin563@@cluster0.tlmy32t.mongodb.net/eLearner?retryWrites=true
