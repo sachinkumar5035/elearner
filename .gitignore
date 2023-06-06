@@ -1,11 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+/elearner/node_modules
+/Backend/node_modules
+/Backend/config/config.env
 /.pnp
 .pnp.js
-/config/config.env
-
 
 # testing
 /coverage
