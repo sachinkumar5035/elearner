@@ -9,17 +9,26 @@ import {
   form,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { login } from '../../redux/actions/userAction.js';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch  = useDispatch();
+
+  const submitHandler = (e)=>{
+    e.preventDefault();
+    dispatch(login(email,password)); // here login function will be called with parameter email and password 
+  }
+
   return (
     <Container h={'95vh'}>
       <VStack h={'full'} justifyContent={'center'} spacing={'14'}>
         <Heading children="Welcome to E-Learner" />
-        <form>
+        <form onSubmit={submitHandler}>
           <Box my={'4'}>
             <FormLabel htmlFor="email" children="Email address" />
             <Input
