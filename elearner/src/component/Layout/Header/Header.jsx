@@ -17,9 +17,15 @@ import {
     RiMenu5Fill,
 } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../redux/actions/userAction.js';
 
-const Header = () => {
+
+
+const Header = ({isAuthenticated,user}) => {
     const { onClose, isOpen, onOpen } = useDisclosure();
+    const dispatch = useDispatch();
+
 
     const LinkButton = ({ url = '/', title = 'Home',onClose }) => (
         <Link onClick={onClose} to={url}>
@@ -27,14 +33,15 @@ const Header = () => {
         </Link>
     );
 
-    const isAuthenticated = false;
-    const user = {
-        role: 'admin',
-    };
+    // const isAuthenticated = false;
+    
+    // const user = {
+    //     role: 'admin',
+    // };
 
-    const logoutClick = ()=> {
-        console.log("Logout")
+    const logoutClickHandler = ()=> {
         onClose();
+        // dispatch(logout());  // user action method 
     }
 
     return (
@@ -82,7 +89,7 @@ const Header = () => {
                                                 <Link onClick={onClose} to={'/profile'}>
                                                     <Button colorScheme="purple" >Profile</Button>
                                                 </Link>
-                                                <Button colorScheme="purple" onClick={logoutClick}>
+                                                <Button colorScheme="purple" onClick={logoutClickHandler}>
                                                     <RiLogoutBoxFill style={{ margin: '4px' }} />
                                                     Logout
                                                 </Button>

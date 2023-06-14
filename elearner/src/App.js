@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './component/Home/Home.jsx';
 import Header from './component/Layout/Header/Header.jsx';
@@ -23,20 +23,57 @@ import Dashboard from './component/Admin/Dashboard/Dashboard.jsx';
 import CreateCourse from './component/Admin/CreateCourse/CreateCourse.jsx';
 import Users from './component/Admin/Users/Users.jsx';
 import AdminCourses from './component/Admin/Courses/AdminCourses.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
+import { CLEAR_ERRORRS, CLEAR_MESSAGE } from './redux/constants/userConstants.js';
+import { loadUser } from './redux/actions/userAction.js';
+import { ProtectedRoute } from 'protected-route-react';
+
 
 function App() {
   // window.addEventListener('contextmenu',e=>{
   //   e.preventDefault();
   // })
 
+  const { user, isAuthenticated, error, message } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch({ type: CLEAR_ERRORRS });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch({ type: CLEAR_MESSAGE })
+    }
+    dispatch(loadUser());
+  }, [dispatch, error, message]);
+
   return (
     <Router>
-      <Header />
+      <Header isAuthenticated={isAuthenticated} user={user} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path='/courses' element={<Courses />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/profile' element={<Profile />} />
+        <Route
+          path='/login'
+          element={<ProtectedRoute 
+            isAuthenticated={!isAuthenticated}
+            redirect='/profile'>
+              {/* if user is not logged in then it will be redireted to login page otherwise it will redirect to profile */}
+            <Login />
+          </ProtectedRoute>}
+        />
+        
+        <Route
+          path='/profile'
+          element={<ProtectedRoute isAuthenticated={isAuthenticated}>
+            {/* if user is logged in then it will go to profile otherwise it will go to login page */}
+            <Profile />
+          </ProtectedRoute>}
+        />
         <Route path='/profile/update' element={<UpdateProfile />} />
         <Route path='/password/change' element={<ChangePassword />} />
         <Route path='/register' element={<Register />} />
@@ -46,7 +83,7 @@ function App() {
         <Route path='/request' element={<Request />} />
         <Route path='/about' element={<About />} />
         <Route path='/subscribe' element={<Subscribe />} />
-        <Route path='*' element={<NotFound/>} />
+        <Route path='*' element={<NotFound />} />
         <Route path='/paymentsuccess' element={<PaymentSuccess />} />
         <Route path='/paymentfail' element={<PaymentFail />} />
         <Route path='/course/:id' element={<CourseDetail />} />
@@ -58,6 +95,7 @@ function App() {
         <Route path='/admin/users' element={<Users />} />
       </Routes>
       <Footer />
+      <Toaster />
     </Router>
   );
 }

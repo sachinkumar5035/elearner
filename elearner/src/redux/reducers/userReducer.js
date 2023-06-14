@@ -1,5 +1,5 @@
-import { createReducer } from "@reduxjs/toolkit";
-import { CLEAR_ERRORRS, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS } from "../constants/userConstants";
+// import { createReducer } from "@reduxjs/toolkit";
+import { CLEAR_ERRORRS, CLEAR_MESSAGE, LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_USER_FAIL, LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS } from "../constants/userConstants";
 
 
 // export const userReducer = createReducer({},{
@@ -38,7 +38,8 @@ export const userReducer = (state = { user: {} }, action) => {
                 ...state,
                 loading: false,
                 isAuthenticated: true,
-                user: action.payload,
+                message: action.payload.message,
+                user: action.payload.user,
             };
         case LOGIN_FAIL:
             return {
@@ -48,10 +49,53 @@ export const userReducer = (state = { user: {} }, action) => {
                 user: null,
                 error: action.payload,
             };
+
+        case LOGOUT_USER_REQUEST:
+            return {
+                loading: true,
+            };
+        case LOGOUT_USER_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                isAuthenticated: false,
+                message: action.payload.message,
+                user: null,
+            };
+        case LOGOUT_USER_FAIL:
+            return {
+                ...state,
+                loading: false,
+                isAuthenticated: true,
+                error: action.payload,
+            };
+
+        case LOAD_USER_REQUEST:
+            return {
+                loading: true,
+            };
+        case LOAD_USER_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                isAuthenticated: true,
+                user: action.payload,
+            };
+        case LOAD_USER_FAIL:
+            return {
+                ...state,
+                loading: false,
+                isAuthenticated: false,
+                user: null,
+                error: action.payload
+            };
+
         case CLEAR_ERRORRS:
+        case CLEAR_MESSAGE:
             return {
                 ...state,
                 error: null,
+                message: null
             };
         default:
             return state;
