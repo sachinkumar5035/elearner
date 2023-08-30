@@ -39,7 +39,7 @@ export const registerUser = CatchAsyncError(async (req, res, next) => {
 
         const fileUri = getDataUri(file);
         const myCloud = cloudinary.v2.uploader.upload(fileUri.content);
-
+        // by default role is user
         user = await User.create({
             name,
             email,
@@ -49,10 +49,11 @@ export const registerUser = CatchAsyncError(async (req, res, next) => {
                 url: (await myCloud).secure_url
             }
         })
-        console.log("user created");
+        console.log("user created sending token ");
+
         sendToken(res, user, "user registered successfully", 201);
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 })
 
@@ -80,14 +81,15 @@ export const login = CatchAsyncError(async (req, res, next) => {
 
 // logout user 
 export const logout = CatchAsyncError(async (req, res, next) => {
+    // at logout making cookie as null 
     res.status(200).cookie("token", null, {
         expires: new Date(Date.now()),
-        httpOnly:true,
-        secure:true,
-        sameSite:"none"
+        httpOnly:true
+        // secure:true,
+        // sameSite:"none"
     }).json({
         success: true,
-        message: "logged out successfulyy"
+        message: "logged out successfully"
     })
 })
 

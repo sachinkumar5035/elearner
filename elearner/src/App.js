@@ -25,7 +25,7 @@ import Users from './component/Admin/Users/Users.jsx';
 import AdminCourses from './component/Admin/Courses/AdminCourses.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
-import { CLEAR_ERRORRS, CLEAR_MESSAGE } from './redux/constants/userConstants.js';
+import { CLEAR_ERRORS, CLEAR_MESSAGE } from './redux/constants/userConstants.js';
 import { loadUser } from './redux/actions/userAction.js';
 import { ProtectedRoute } from 'protected-route-react';
 
@@ -38,17 +38,23 @@ function App() {
   const { user, isAuthenticated, error, message } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
+  useEffect(()=>{
+    // console.log("yaha load user call hua");
+    if(user){
+      dispatch(loadUser());
+    }
+  },[])
 
   useEffect(() => {
     if (error) {
       toast.error(error);
-      dispatch({ type: CLEAR_ERRORRS });
+      dispatch({ type: CLEAR_ERRORS });
     }
     if (message) {
       toast.success(message);
       dispatch({ type: CLEAR_MESSAGE })
     }
-    dispatch(loadUser());
+    // dispatch(loadUser());
   }, [dispatch, error, message]);
 
   return (

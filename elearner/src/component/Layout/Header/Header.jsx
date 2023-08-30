@@ -41,7 +41,7 @@ const Header = ({isAuthenticated,user}) => {
 
     const logoutClickHandler = ()=> {
         onClose();
-        // dispatch(logout());  // user action method 
+        dispatch(logout());  // user action method 
     }
 
     return (

@@ -76,7 +76,7 @@ const TandC = ({ termsAndCondition }) => (
 const About = () => {
   return (
     <Container maxW={'container.lg'} boxShadow={'lg'} padding={'14'}>
-      <Heading children="Abour us" textAlign={['center', 'left']} />
+      <Heading children="About us" textAlign={['center', 'left']} />
       <Founder />
       <Stack m={'8'} direction={['column', 'row']} alignItems="center">
         <Text fontFamily={'sans-serif'}>

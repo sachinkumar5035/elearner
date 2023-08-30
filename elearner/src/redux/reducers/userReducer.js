@@ -1,5 +1,5 @@
 // import { createReducer } from "@reduxjs/toolkit";
-import { CLEAR_ERRORRS, CLEAR_MESSAGE, LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_USER_FAIL, LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS } from "../constants/userConstants";
+import { CLEAR_ERRORS, CLEAR_MESSAGE, LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_USER_FAIL, LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS } from "../constants/userConstants";
 
 
 // export const userReducer = createReducer({},{
@@ -90,7 +90,7 @@ export const userReducer = (state = { user: {} }, action) => {
                 error: action.payload
             };
 
-        case CLEAR_ERRORRS:
+        case CLEAR_ERRORS:
         case CLEAR_MESSAGE:
             return {
                 ...state,
