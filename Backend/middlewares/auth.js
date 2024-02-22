@@ -9,15 +9,15 @@ export const isAuthenticated = CatchAsyncError(async (req, res, next) => {
 
     try {
         const { token } = req.cookies;
-        console.log(token);
+        console.log("token",token);
         if (!token) {
             return next(new ErrorHandler("please log in ", 401));
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET_CODE);
-        req.user = await User.findById(decoded._id);
+        req.user = await User.findById(decoded._id); // user will be saved in req.user 
         next();
     } catch (error) {
-
+        console.log(error.message);
     }
 })
 

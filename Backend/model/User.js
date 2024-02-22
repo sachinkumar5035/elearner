@@ -76,7 +76,7 @@ schema.methods.getJWTToken = function () {
   },
     process.env.JWT_SECRET_CODE,
     {
-      expiresIn: '15d'
+      expiresIn: '15d',
     })
 }
 

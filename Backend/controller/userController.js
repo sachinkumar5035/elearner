@@ -96,7 +96,7 @@ export const logout = CatchAsyncError(async (req, res, next) => {
 // get a user profile when logged in
 export const getMyProfile = CatchAsyncError(async (req, res, next) => {
     const user = await User.findById(req.user._id);
-
+    // console.log(req.user._id);
     res.status(200).json({
         success: true,
         user

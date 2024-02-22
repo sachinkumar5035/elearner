@@ -14,9 +14,9 @@ export const sendEmail= async(options)=>{
             pass:process.env.SMTP_PASSWORD,
         },
     });
-    console.log("email: "+options.email);
-    console.log("message: "+options.message);
-    console.log("subject: "+options.subject);
+    // console.log("email: "+options.email);
+    // console.log("message: "+options.message);
+    // console.log("subject: "+options.subject);
     const mailBody = {
         from: process.env.SMTP_MAIL, // kiski mail id se mail jayega
         to: options.email, // kisko mail jayega which is passed from reset password function

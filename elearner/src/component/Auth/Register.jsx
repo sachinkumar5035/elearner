@@ -11,11 +11,14 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import { register } from '../../redux/actions/userAction';
+
 
 export const fileUploadCSS = {
   cursor: 'pointer',
   margin: 'auto',
-  widhth: '110%',
+  width: '110%',
   height: '100%',
   border: 'none',
   color: 'purple',
@@ -33,6 +36,10 @@ const Register = () => {
   const [imagePrev, setImagePrev] = useState('');
   const [image, setImage] = useState('');
 
+  const dispatch  = useDispatch();
+
+
+
   const imageChangeHandler = e => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -43,11 +50,21 @@ const Register = () => {
     };
   };
 
+  const submitHandler = (e)=>{
+    e.preventDefault();
+    const myForm = new FormData();
+    myForm.append("name",name);
+    myForm.append("email",email);
+    myForm.append("password",password);
+    myForm.append("file",image); // because in backend we have fetched it as name file 
+    dispatch(register(myForm)); // this form data will be passed to register function of frontend it will be received as formdata .
+  }
+
   return (
     <Container h={'95vh'}>
       <VStack h={'full'} justifyContent={'center'} spacing={'14'}>
         <Heading textTransform={'uppercase'} children="Registration" />
-        <form>
+        <form onSubmit={submitHandler}>
           <Box my={'4'} display={'flex'} justifyContent={'center'}>
             <Avatar src={imagePrev} size={'2xl'} />
           </Box>
