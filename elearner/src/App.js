@@ -90,7 +90,7 @@ function App() {
               element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   {/* if user is logged in then it will go to profile otherwise it will go to login page */}
-                  <Profile />
+                  <Profile user={user} />
                 </ProtectedRoute>
               }
             />

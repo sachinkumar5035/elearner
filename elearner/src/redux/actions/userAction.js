@@ -12,7 +12,7 @@ export const login = (email, password) => async (dispatch) => {
             config,
             {
                 withCredential: true
-            }
+            }  
         );
         dispatch({ type: LOGIN_SUCCESS, payload: data });
     } catch (error) {
@@ -47,7 +47,7 @@ export const loadUser = () => async (dispatch) => {
                 withCredential: true
             }
         );
-        console.log(data);
+        // console.log(data);
         dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
     } catch (error) {
         dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message
