@@ -3,26 +3,14 @@ import React, { useState } from 'react'
 import { RiDeleteBin7Fill } from 'react-icons/ri'
 import { Link } from 'react-router-dom'
 import { fileUploadCSS } from '../Auth/Register'
+import { updateProfilePicture } from '../../redux/actions/profile'
+import { useDispatch } from 'react-redux'
 
 const Profile = ({user}) => {
 
-  // const user = {
-  //   name: "sachin",
-  //   email: "sachinkumar5035@gmail.com",
-  //   createdAt: String(new Date().toISOString()),
-  //   role: "user",
-  //   subscription: {
-  //     status: undefined,
-  //   },
-  //   playlist: [
-  //     {
-  //       course: "course Id",
-  //       poster: "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-james-wheeler-414612.jpg&fm=jpg"
-  //     }
-  //   ]
-  // }
-
   // console.log("user",user);
+
+  const dispatch = useDispatch();
 
   const removeFromPlaylistHandler = (id) => {
     alert("remove handler clicked " + id)
@@ -30,12 +18,13 @@ const Profile = ({user}) => {
 
   const changeImageSubmitHandler = (e,image)=>{
     e.preventDefault();
-    console.log(image);
+    const myForm = new FormData();
+    myForm.append("file",image); // because in backend we have fetched it as name file 
+    dispatch(updateProfilePicture(myForm)); 
   }
 
 
   const {isOpen,onClose,onOpen} = useDisclosure();
-
 
   return (
     <Container minH={'95vh'} maxW={'container.lg'} paddingY={'8'}>
@@ -47,7 +36,7 @@ const Profile = ({user}) => {
       </Heading>
 
       <Stack j
-        ustifyContent={'flex-start'}
+        justifyContent={'flex-start'}
         direction={['column', 'row']}
         alignItems={'center'}
         spacing={['8', '16']}
@@ -89,10 +78,10 @@ const Profile = ({user}) => {
             direction={['column', 'row']}
             alignItems={'center'}
           >
-            <Link to={'/profile/change'}>
+            <Link to={'/profile/update'}>
               <Button colorScheme='purple' variant={'ghost'}>Update Profile</Button>
             </Link>
-            <Link to={'/password/update'}>
+            <Link to={'/password/change'}>
               <Button colorScheme='purple' variant={'ghost'}>Change Password</Button>
             </Link>
           </Stack>
@@ -101,7 +90,7 @@ const Profile = ({user}) => {
 
       <Heading children="Playlist" size={'md'} />
       {
-        user.playlist.length > 0 && (
+        user.playlist.length>0 ? (
           <Stack
             direction={['column', 'row']}
             alignItems={'center'}
@@ -131,6 +120,8 @@ const Profile = ({user}) => {
             }
 
           </Stack>
+        ):(
+          <Text >No Playlist available</Text>
         )
       }
       <ChangeBox isOpen={isOpen} onClose={onClose} changeImageSubmitHandler={changeImageSubmitHandler}/>

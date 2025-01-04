@@ -1,8 +1,21 @@
-import axios from 'axios';
-import { LOAD_USER_FAIL, LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOGIN_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT_USER_FAIL, LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, REGISTER_USER_FAIL, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS } from '../constants/userConstants.js';
-import axiosInstance from '../../config/baseApi.js';
+// import axios from 'axios';
+import {
+    LOAD_USER_FAIL,
+    LOAD_USER_REQUEST,
+    LOAD_USER_SUCCESS,
+    LOGIN_FAIL,
+    LOGIN_REQUEST,
+    LOGIN_SUCCESS,
+    LOGOUT_USER_FAIL,
+    LOGOUT_USER_REQUEST,
+    LOGOUT_USER_SUCCESS,
+    REGISTER_USER_FAIL,
+    REGISTER_USER_REQUEST,
+    REGISTER_USER_SUCCESS
+} from '../constants/userConstants.js';
 
-const stringApi = "http://192.168.0.100:4000";
+import axiosInstance from '../../config/baseApi.js';
+// const stringApi = "http://192.168.0.100:4000";
 
 export const login = (email, password) => async (dispatch) => {
     try {
@@ -12,7 +25,7 @@ export const login = (email, password) => async (dispatch) => {
             config,
             {
                 withCredential: true
-            }  
+            }
         );
         dispatch({ type: LOGIN_SUCCESS, payload: data });
     } catch (error) {
@@ -50,8 +63,9 @@ export const loadUser = () => async (dispatch) => {
         // console.log(data);
         dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
     } catch (error) {
-        dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message
-         });
+        dispatch({
+            type: LOAD_USER_FAIL, payload: error.response.data.message
+        });
     }
 }
 
